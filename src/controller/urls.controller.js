@@ -1,42 +1,55 @@
-import express from "express";
-import urlsModel from "../model/urls.js";
+import urls from "../model/urls.js";
 import dotenv from "dotenv";
-import shortid from "shortid";
+import { nanoid } from "nanoid";
 
 dotenv.config()
 
 const urlAPI = process.env.API_URL;
 
 export default class urlsController {
-     static shorten = (req,res) =>{
 
-        const { originUrl } = req.body
+    async listarNomeUrls(req,res){
+        const nomeUrl = req.params
 
-        const url = urlsModel.findOne({ originURL })
+        urls.find({$rege})
+    }
+
+     async listarURLS(req,res){
+        const result = await urls.find().select({'_id': 0, '__v': 0})
+        res.json(result)
+    }
+
+     async  shorten(req,res) {
+
+        const { originURL } = req.body
+
+        const url = await urls.findOne({ originURL })
 
         if(url){
             res.json(url)
         }
 
-        const hash = shortid.generate();
+        const hash = nanoid(7)
         const shortURL = `${urlAPI}/${hash}`
 
-        const newUrl = urlsModel.create({ hash, shortURL, originURL })
+        const newUrl =  await urls.create({ hash, shortURL, originURL })
 
         res.json(newUrl)
     }
 
-    static redirect = (req, res) =>{
+    async redirect(req, res) {
 
         const { hash } = req.params
-        const url = urlsModel.findOne({ hash })
+        const url = await urls.findOne({ hash })
 
         if(url){
             res.redirect(url.originURL)
         }
-
+        else{
         res.status(400).json({error: 'URL not found'})
+        }
     }
+
 }
 
 

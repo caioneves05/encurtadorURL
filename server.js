@@ -2,6 +2,8 @@ import app from "./src/app.js";
 import dotenv from "dotenv";
 import urlsController from "./src/controller/urls.controller.js";
 
+const urls = new urlsController()
+
 dotenv.config()
 
 const porta = process.env.PORT;
@@ -12,5 +14,6 @@ app.listen(porta, () => {
     console.log(`Servidor rodando em http://localhost:${porta}`);
 });
 
-app.post('/shorten', urlsController.shorten);
-app.get('/:hash', urlsController.redirect);
+app.get("/urls", urls.listarURLS);
+app.post('/shorten', urls.shorten);
+app.get('/:hash', urls.redirect);
