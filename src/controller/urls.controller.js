@@ -1,6 +1,6 @@
 import urls from "../model/urls.js";
 import dotenv from "dotenv";
-import { nanoid } from "nanoid";
+import { nanoid } from "nanoid"
 
 dotenv.config()
 
@@ -8,18 +8,20 @@ const urlAPI = process.env.API_URL;
 
 export default class urlsController {
 
-    async listarNomeUrls(req,res){
-        const nomeUrl = req.params
+     async listarURLSPorNome(req,res){
+        const nomeUrl = req.params.id
 
-        urls.find({$rege})
+        const query =  await urls.find({originURL : {$regex: nomeUrl, $options: 'i'}}).select({'_id': 0, '__v': 0, 'hash': 0})
+
+        res.json(query)
     }
 
-     async listarURLS(req,res){
+    async listarURLS(req,res){
         const result = await urls.find().select({'_id': 0, '__v': 0})
         res.json(result)
     }
 
-     async  shorten(req,res) {
+    async shorten(req,res) {
 
         const { originURL } = req.body
 
@@ -31,7 +33,7 @@ export default class urlsController {
 
         const hash = nanoid(7)
         const shortURL = `${urlAPI}/${hash}`
-
+                        //Passando os dados para o banco de dados.
         const newUrl =  await urls.create({ hash, shortURL, originURL })
 
         res.json(newUrl)
