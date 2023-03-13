@@ -8,7 +8,7 @@ const urlAPI = process.env.API_URL;
 
 export default class urlsController {
 
-     async listarURLSPorNome(req,res){
+     async listURLSByName(req,res){
         const nomeUrl = req.params.id
 
         const query =  await urls.find({originURL : {$regex: nomeUrl, $options: 'i'}}).select({'_id': 0, '__v': 0, 'hash': 0})

@@ -14,5 +14,5 @@ app.listen(porta, () => {
 
 app.get("/urls", urls.listarURLS);
 app.post('/shorten', urls.shorten);
-app.get('/urls/:id', urls.listarURLSPorNome);
+app.get('/urls/:id', urls.listURLSByName);
 app.get('/:hash', urls.redirect);
